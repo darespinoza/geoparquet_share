@@ -1,0 +1,10 @@
+# Environment variables
+.env
+
+# Volumes directories
+minio-data/*
+postgis-data/*
+dagster_home/*
+
+# Python virtual environment
+venv/
