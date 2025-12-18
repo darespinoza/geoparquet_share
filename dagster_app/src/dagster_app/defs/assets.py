@@ -6,13 +6,13 @@ from datetime import datetime, timedelta
 from sqlalchemy import create_engine
 from .resources import PostgresResource
 from .tools import (
-    generate_fake_meteo_data,
+    generate_sample_meteo_table,
 )
 
 
 
 @dg.asset
-def fake_meteo_data(context: dg.AssetExecutionContext,
+def sample_meteo_table(context: dg.AssetExecutionContext,
                     postgres_res: PostgresResource) -> None:
     """
     Write a DataFrame to PostgreSQL.
@@ -21,7 +21,7 @@ def fake_meteo_data(context: dg.AssetExecutionContext,
     
     try:
         # Generate fake meteo data for a station located in Cuenca Ecuador
-        df = generate_fake_meteo_data(station_id="UAZ001",
+        df = generate_sample_meteo_table(station_id="UAZ001",
                                 latitude=-2.8953,
                                 longitude=-78.9963)
         
@@ -29,7 +29,7 @@ def fake_meteo_data(context: dg.AssetExecutionContext,
         engine = postgres_res.get_engine()
         
         # Write DataFrame to PostgreSQL
-        table_name = 'fake_meteo_data'
+        table_name = 'sample_meteo_table'
         df.to_sql(
                 name=table_name,
                 con=engine,
