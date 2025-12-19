@@ -45,9 +45,9 @@ services:
       - ./dagster_home:/opt/dagster/dagster_home
     env_file:
       - ./.env
-    # depends_on:
-    #   - postgis_source
-    #   - minio_target
+    depends_on:
+      - postgis_source
+      - minio_target
     networks:
       - geops_network
 

@@ -16,7 +16,8 @@ from jinja2 import Template
 # Get Dagster Logger
 logger = get_dagster_logger()
 
-def generate_fake_meteo_data(station_id="ST001",
+def generate_fake_meteo_data(timestamp=datetime.now().replace(hour=0, minute=0, second=0, microsecond=0),
+                            station_id="ST001",
                             latitude=0,
                             longitude=0,
                             ) -> pd.DataFrame:
@@ -24,12 +25,11 @@ def generate_fake_meteo_data(station_id="ST001",
     Generate fake meteorological data for the current day in 10-minute intervals.
 
     Returns a pandas DataFrame with columns:
-    timestamp, station_id, temperature, humidity, pressure
+    timestamp, station_id, latitude, longitude, temperature, humidity, pressure
     """
     try:
         # Current date (midnight to next midnight)
-        today = datetime.now().replace(hour=0, minute=0, second=0, microsecond=0)
-        timestamps = pd.date_range(start=today, end=today + timedelta(days=1), freq="10min", inclusive="left")
+        timestamps = pd.date_range(start=timestamp, end=timestamp + timedelta(days=1), freq="10min", inclusive="left")
 
         # Fake data
         n = len(timestamps)
