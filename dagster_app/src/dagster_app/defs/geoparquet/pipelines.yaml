@@ -1,0 +1,36 @@
+pipelines:
+  - asset_name: UAZ001_TEMP
+    sql_query: >
+      select md."timestamp", 
+        md.station_id,
+        md.temperature,
+        md.geom 
+      from sample_db.public.meteo_data md
+      where date_trunc('day', md."timestamp") = '{{partition}}'
+        and md.station_id = 'UAZ001';
+    prefix_schema: public
+    prefix_table: UAZ001_TEMP
+
+  - asset_name: UAZ001_HUM
+    sql_query: >
+      select md."timestamp", 
+        md.station_id,
+        md.humidity,
+        md.geom 
+      from sample_db.public.meteo_data md
+      where date_trunc('day', md."timestamp") = '{{partition}}'
+        and md.station_id = 'UAZ001';
+    prefix_schema: public
+    prefix_table: UAZ001_HUM
+  
+  - asset_name: UAZ001_PRES
+    sql_query: >
+      select md."timestamp", 
+        md.station_id,
+        md.pressure,
+        md.geom 
+      from sample_db.public.meteo_data md
+      where date_trunc('day', md."timestamp") = '{{partition}}'
+        and md.station_id = 'UAZ001';
+    prefix_schema: public
+    prefix_table: UAZ001_PRES
