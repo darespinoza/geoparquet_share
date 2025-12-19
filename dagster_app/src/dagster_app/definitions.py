@@ -1,7 +1,10 @@
 from pathlib import Path
-from dagster import definitions, load_from_defs_folder
+import dagster as dg
+from .defs.geoparquet import geoparquet_assets
 
 
-@definitions
+@dg.definitions
 def defs():
-    return load_from_defs_folder(path_within_project=Path(__file__).parent)
+    return dg.Definitions.merge(
+        dg.load_from_defs_folder(path_within_project=Path(__file__).parent)   
+    )
