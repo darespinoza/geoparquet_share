@@ -1,36 +1,36 @@
 pipelines:
-  - asset_name: UAZ001_TEMP
+  - asset_name: uazuay_temp
     sql_query: >
-      select md."timestamp", 
+      select date_trunc('hour', md."timestamp") as hour, 
         md.station_id,
-        md.temperature,
-        md.geom 
+        avg(md.temperature ) as avg_temperature,
+        md.geom
       from sample_db.public.meteo_data md
       where date_trunc('day', md."timestamp") = '{{partition}}'
-        and md.station_id = 'UAZ001';
+      group by hour, md.station_id, md.geom
     prefix_schema: public
-    prefix_table: UAZ001_TEMP
+    prefix_table: uazuay_temp
 
-  - asset_name: UAZ001_HUM
+  - asset_name: uazuay_hum
     sql_query: >
-      select md."timestamp", 
+      select date_trunc('hour', md."timestamp") as hour, 
         md.station_id,
-        md.humidity,
-        md.geom 
+        avg(md.humidity) as avg_humidity,
+        md.geom
+      from sample_db.public.meteo_data md
+      where date_trunc('day', md."timestamp") = '2025-12-21 00:00:00'
+      group by hour, md.station_id, md.geom
+    prefix_schema: public
+    prefix_table: uazuay_hum
+
+  - asset_name: uazuay_pres
+    sql_query: >
+      select date_trunc('hour', md."timestamp") as hour, 
+        md.station_id,
+        avg(md.pressure) as avg_pressure,
+        md.geom
       from sample_db.public.meteo_data md
       where date_trunc('day', md."timestamp") = '{{partition}}'
-        and md.station_id = 'UAZ001';
+      group by hour, md.station_id, md.geom
     prefix_schema: public
-    prefix_table: UAZ001_HUM
-  
-  - asset_name: UAZ001_PRES
-    sql_query: >
-      select md."timestamp", 
-        md.station_id,
-        md.pressure,
-        md.geom 
-      from sample_db.public.meteo_data md
-      where date_trunc('day', md."timestamp") = '{{partition}}'
-        and md.station_id = 'UAZ001';
-    prefix_schema: public
-    prefix_table: UAZ001_PRES
+    prefix_table: uazuay_pres
