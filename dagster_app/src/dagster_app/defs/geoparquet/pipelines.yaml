@@ -1,5 +1,5 @@
 pipelines:
-  - asset_name: uazuay_temp
+  - asset_name: cuenca_temp
     sql_query: >
       select date_trunc('hour', md."timestamp") as hour, 
         md.station_id,
@@ -9,21 +9,21 @@ pipelines:
       where date_trunc('day', md."timestamp") = '{{partition}}'
       group by hour, md.station_id, md.geom
     prefix_schema: public
-    prefix_table: uazuay_temp
+    prefix_table: cuenca_temp
 
-  - asset_name: uazuay_hum
+  - asset_name: cuenca_hum
     sql_query: >
       select date_trunc('hour', md."timestamp") as hour, 
         md.station_id,
         avg(md.humidity) as avg_humidity,
         md.geom
       from sample_db.public.meteo_data md
-      where date_trunc('day', md."timestamp") = '2025-12-21 00:00:00'
+      where date_trunc('day', md."timestamp") = '{{partition}}
       group by hour, md.station_id, md.geom
     prefix_schema: public
-    prefix_table: uazuay_hum
+    prefix_table: cuenca_hum
 
-  - asset_name: uazuay_pres
+  - asset_name: cuenca_pres
     sql_query: >
       select date_trunc('hour', md."timestamp") as hour, 
         md.station_id,
@@ -33,4 +33,4 @@ pipelines:
       where date_trunc('day', md."timestamp") = '{{partition}}'
       group by hour, md.station_id, md.geom
     prefix_schema: public
-    prefix_table: uazuay_pres
+    prefix_table: cuenca_pres

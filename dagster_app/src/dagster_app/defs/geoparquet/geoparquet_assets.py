@@ -17,7 +17,7 @@ from ..tools import (
 
 # Minio partition
 minio_daily_partition = dg.DailyPartitionsDefinition(
-    start_date="2018-11-01",
+    start_date="2025-12-01",
     timezone="America/Guayaquil",
 )
 
@@ -58,18 +58,18 @@ def create_pg_to_minio_asset(asset_name: str,
             
             # Query to database, create geoparquet and upload to MinIO
             pg_to_minio_geoparquet(sql_query=sql_template,
-                                    object_prefix=object_prefix,
-                                    bucket_name=BUCKET_NAME,
-                                    object_template=OBJECT_TEMPLATE,
-                                    pg_engine=pg_engine,
-                                    minio_res=minio_res,
-                                    chunk_size=CURSOR_CHUNK_SIZE)
+                                object_prefix=object_prefix,
+                                bucket_name=BUCKET_NAME,
+                                object_template=OBJECT_TEMPLATE,
+                                pg_engine=pg_engine,
+                                minio_res=minio_res,
+                                chunk_size=CURSOR_CHUNK_SIZE)
             
             # Finish asset execution
             pass
         
         except Exception as exc:
-            context.log.error(f"Error en la carga de Postgres a Minio de '{asset_name}'.\n{str(exc)}")
+            context.log.error(f"Error while loading to MinIO'{asset_name}'.\n{str(exc)}")
             return None
     
     # Return new asset

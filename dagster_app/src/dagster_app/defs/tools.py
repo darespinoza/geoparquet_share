@@ -20,23 +20,27 @@ def generate_fake_meteo_data(timestamp=datetime.now().replace(hour=0, minute=0, 
                             station_id="ST001",
                             latitude=0,
                             longitude=0,
-                            ) -> pd.DataFrame:
+                            table_name="sample_data",
+                            engine=None,
+                            schema_name='public',
+                            ) -> int:
     """
-    Generate fake meteorological data for the current day in 10-minute intervals.
+    Generate fake meteorological data for the past day in 10-minute intervals.
+    Then upload the resultant DataFrame to Postgis
 
-    Returns a pandas DataFrame with columns:
-    timestamp, station_id, latitude, longitude, temperature, humidity, pressure
+    Returns number of inserted rows.
     """
     try:
         # Current date (midnight to next midnight)
         timestamps = pd.date_range(start=timestamp, end=timestamp + timedelta(days=1), freq="10min", inclusive="left")
 
-        # Fake data
+        # Generate fake data
         n = len(timestamps)
         temperature = np.random.normal(loc=20, scale=5, size=n).round(1)  # °C
         humidity = np.random.uniform(low=40, high=90, size=n).round(1)    # %
         pressure = np.random.normal(loc=1013, scale=5, size=n).round(1)   # hPa
 
+        # Convert to DataFrame
         df = pd.DataFrame({
             "timestamp": timestamps,
             "station_id": station_id,
@@ -46,8 +50,17 @@ def generate_fake_meteo_data(timestamp=datetime.now().replace(hour=0, minute=0, 
             "humidity": humidity,
             "pressure": pressure
         })
+        
+        # Upload to Postgis
+        ins_rows = df.to_sql(
+            name=table_name,
+            con=engine,
+            schema=schema_name,
+            if_exists='append',
+            index=False
+        )
 
-        return df
+        return ins_rows
     except Exception as exc:
         raise
     
@@ -172,7 +185,7 @@ def pg_to_minio_geoparquet(sql_query: str,
                 crs='4326')
             object_key_4326 = f"{object_prefix}/{object_template_4326}"
             df_convert_n_upload(input_df=df,
-                                geom_col='geom_4326',
+                                geom_col='geom',
                                 input_crs='EPSG:4326',
                                 s3_object_key=object_key_4326,
                                 s3_bucket=bucket_name,

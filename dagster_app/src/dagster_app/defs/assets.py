@@ -24,34 +24,58 @@ def fake_meteo_data(context: dg.AssetExecutionContext,
     Write a DataFrame to PostgreSQL.
     
     Handling exceptions in a very simplified manner.
-    """
+    """ 
+    
+    # Engine variable
+    engine = None
     
     try:
         # Get partition bounds
         start, end = context.partition_time_window
         partition_start = start.replace(tzinfo=None)
         
-        # Generate fake meteo data for a station located in Cuenca Ecuador
-        df = generate_fake_meteo_data(timestamp=partition_start,
-                                station_id="UAZ001",
-                                latitude=-2.8953,
-                                longitude=-78.9963)
-        
-        # Get engine and create 
+        # Get SQLAlchemy engine
         engine = postgres_res.get_engine()
         
-        # Write DataFrame to PostgreSQL
+        # Generate fake meteo data for three stations located in Cuenca Ecuador
         table_name = 'meteo_data'
-        df.to_sql(
-                name=table_name,
-                con=engine,
-                schema='public',
-                if_exists='append',
-                index=False
-            )
         
-        # Dipose engine after use
-        engine.dispose()
-        context.log.info(f"Successfully wrote {len(df)} rows to {table_name} table")
+        # Station 1, located in Chola Cuencana 
+        ir_1 = generate_fake_meteo_data(timestamp=partition_start,
+                                station_id="CUE-001",
+                                latitude=-2.8953,
+                                longitude=-78.9963,
+                                table_name=table_name,
+                                engine=engine,
+                                schema_name='public'
+                            )
+        context.log.info(f"Successfully wrote {ir_1} rows to {table_name} table")
+        
+        # Station 2, located in Ictocruz Park
+        ir_2 = generate_fake_meteo_data(timestamp=partition_start,
+                                station_id="CUE-002",
+                                latitude=-2.9303,
+                                longitude=78.9997,
+                                table_name=table_name,
+                                engine=engine,
+                                schema_name='public'
+                            )
+        context.log.info(f"Successfully wrote {ir_2} rows to {table_name} table")
+        
+        # Station 3, located in Cebollar Park
+        ir_3 = generate_fake_meteo_data(timestamp=partition_start,
+                                station_id="CUE-003",
+                                latitude=-2.8805,
+                                longitude=-79.0268,
+                                table_name=table_name,
+                                engine=engine,
+                                schema_name='public'
+                            )
+        context.log.info(f"Successfully wrote {ir_3} rows to {table_name} table")
+        
     except Exception as exc:
         context.log.error(f"While creating fake meteo data\n{str(exc)}")
+    finally:
+        # Dipose engine
+        if engine:
+            engine.dispose()
