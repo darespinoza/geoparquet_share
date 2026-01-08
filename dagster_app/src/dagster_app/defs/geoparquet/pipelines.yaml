@@ -18,7 +18,7 @@ pipelines:
         avg(md.humidity) as avg_humidity,
         md.geom
       from sample_db.public.meteo_data md
-      where date_trunc('day', md."timestamp") = '{{partition}}
+      where date_trunc('day', md."timestamp") = '{{partition}}'
       group by hour, md.station_id, md.geom
     prefix_schema: public
     prefix_table: cuenca_hum

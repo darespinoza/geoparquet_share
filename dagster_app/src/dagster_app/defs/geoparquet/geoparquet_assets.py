@@ -62,7 +62,7 @@ def create_pg_to_minio_asset(asset_name: str,
                                 bucket_name=BUCKET_NAME,
                                 object_template=OBJECT_TEMPLATE,
                                 pg_engine=pg_engine,
-                                minio_res=minio_res,
+                                s3_resource=minio_res,
                                 chunk_size=CURSOR_CHUNK_SIZE)
             
             # Finish asset execution

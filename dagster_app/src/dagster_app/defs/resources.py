@@ -30,7 +30,7 @@ def resources() -> dg.Definitions:
                 password=os.getenv("POSTGRES_PASSWORD")
             ),
             "minio_res" :S3Resource(
-                endpoint_url="http://minio_target:9000",
+                endpoint_url="http://localhost:9000",
                 aws_access_key_id=os.getenv("MINIO_ACCESS_KEY"),
                 aws_secret_access_key=os.getenv("MINIO_SECRET_KEY"),
                 region_name="us-east-1",

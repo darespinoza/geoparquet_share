@@ -14,7 +14,7 @@ fake_meteo_data_job = dg.define_asset_job(
 
 # Postgres to Minio job
 pg_to_minio_job = dg.define_asset_job(
-    name="pg_to_minio_priv_job",
+    name="pg_to_minio_job",
     selection=dg.load_assets_from_modules(modules=[geoparquet_assets]),
 )
 

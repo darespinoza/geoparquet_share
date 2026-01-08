@@ -180,14 +180,15 @@ def pg_to_minio_geoparquet(sql_query: str,
             df = pd.DataFrame(rows, columns=[col.name for col in cursor.description])
             
             # Convert DataFrame to GeoDataFrame, then to Geoparquet and upload to Minio with CRS 32717
-            object_template_4326 = Template(object_template).render(
+            object_key_template = Template(object_template).render(
                 batch_id=batch,
                 crs='4326')
-            object_key_4326 = f"{object_prefix}/{object_template_4326}"
+            object_key = f"{object_prefix}/{object_key_template}"
+            logger.warning(object_key)
             df_convert_n_upload(input_df=df,
                                 geom_col='geom',
                                 input_crs='EPSG:4326',
-                                s3_object_key=object_key_4326,
+                                s3_object_key=object_key,
                                 s3_bucket=bucket_name,
                                 minio_s3_client=s3_client
                             )
