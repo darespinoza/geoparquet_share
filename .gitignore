@@ -3,8 +3,10 @@
 
 # Volumes directories
 minio-data/*
+!minio-data/.gitkeep
 postgis-data/*
+!postgis-data/.gitkeep
 dagster_home/*
-
+!dagster_home/.gitkeep
 # Python virtual environment
 venv/
