@@ -184,7 +184,6 @@ def pg_to_minio_geoparquet(sql_query: str,
                 batch_id=batch,
                 crs='4326')
             object_key = f"{object_prefix}/{object_key_template}"
-            logger.warning(object_key)
             df_convert_n_upload(input_df=df,
                                 geom_col='geom',
                                 input_crs='EPSG:4326',

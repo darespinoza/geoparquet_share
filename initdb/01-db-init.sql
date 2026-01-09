@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS public.meteo_data (
 CREATE OR REPLACE FUNCTION public.set_geom4326()
 RETURNS trigger AS $$
 BEGIN
-    new.geom = ST_SetSRID(ST_MakePoint(new.latitude, new.longitude),4326);
+    new.geom = ST_SetSRID(ST_MakePoint(new.longitude, new.latitude),4326);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;

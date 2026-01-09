@@ -11,7 +11,7 @@ from .tools import (
 
 # Fake meteo data DailyPartition
 fake_meteo_daily_partition = dg.DailyPartitionsDefinition(
-    start_date="2025-01-01",
+    start_date="2025-12-01",
     timezone="America/Guayaquil",
 )
 
@@ -55,7 +55,7 @@ def fake_meteo_data(context: dg.AssetExecutionContext,
         ir_2 = generate_fake_meteo_data(timestamp=partition_start,
                                 station_id="CUE-002",
                                 latitude=-2.9303,
-                                longitude=78.9997,
+                                longitude=-78.9997,
                                 table_name=table_name,
                                 engine=engine,
                                 schema_name='public'
