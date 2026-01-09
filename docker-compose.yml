@@ -1,7 +1,7 @@
 services:
-  postgis_source:
+  postgis-source:
     image: postgis/postgis:16-3.4
-    container_name: postgis_source
+    container_name: postgis-source
     restart: unless-stopped
     environment:
       POSTGRES_DB: ${POSTGRES_DATABASE}
@@ -13,11 +13,11 @@ services:
       - ./initdb:/docker-entrypoint-initdb.d
       - ./postgis-data:/var/lib/postgresql/data/
     networks:
-      - geops_network
+      - geopnetw
 
-  minio_target:
+  minio-target:
     image: minio/minio:RELEASE.2025-04-22T22-12-26Z
-    container_name: minio_target
+    container_name: minio-target
     restart: unless-stopped
     command: server /data --console-address ":9001"
     ports:
@@ -29,7 +29,7 @@ services:
     volumes:
       - ./minio-data:/data
     networks:
-      - geops_network
+      - geopnetw
 
   dagster_app:
     restart: unless-stopped
@@ -45,12 +45,12 @@ services:
     env_file:
       - ./.env
     depends_on:
-      - postgis_source
-      - minio_target
+      - postgis-source
+      - minio-target
     networks:
-      - geops_network
+      - geopnetw
 
 networks:
-  geops_network:
-    name: geops_network
+  geopnetw:
+    name: geopnetw
     driver: bridge
